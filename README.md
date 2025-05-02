@@ -1,4 +1,4 @@
-## 題目：魔術方塊 Rubiks## 題目：魔術方塊 Rubik's Cube
+## 題目：魔術方塊 Rubik's Cube
 
 ## 組員：
 • B11207040 林信儒
