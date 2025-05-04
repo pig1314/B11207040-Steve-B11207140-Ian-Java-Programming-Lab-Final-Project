@@ -35,7 +35,7 @@ public class RubiksCubePanel extends JPanel
                      case KeyEvent.VK_UP:
                          turnAround();
                          break;
-                   /*case KeyEvent.VK_E:
+                     case KeyEvent.VK_E:
                          upperLeft();
                          break;
                      case KeyEvent.VK_D:
@@ -45,13 +45,13 @@ public class RubiksCubePanel extends JPanel
                          lowerLeft();
                          break;
                      case KeyEvent.VK_Q:
-                         rightDown();
+                         rightUp();
                          break;
-                     case KeyEvent.VK_A:
-                         middleDown();
+                     /*case KeyEvent.VK_A:
+                         middleUp();
                          break;
                      case KeyEvent.VK_Z:
-                         leftDown();
+                         leftUp();
                          break;*/
                  }
                  repaint();
@@ -60,8 +60,8 @@ public class RubiksCubePanel extends JPanel
          setFocusable(true);
    }
    
-   public void paint(Graphics g) 
-   {
+public void paint(Graphics g) 
+{
      super.paint(g);
      Graphics2D g2d = (Graphics2D) g;
 
@@ -70,28 +70,41 @@ public class RubiksCubePanel extends JPanel
      g2d.fillRect(0, 0, 1600, 900);
      
      //fill color
+     int start = 0, stop = 0, differ = 0, j, k, p, l;
+     if(show[0] == 1)
+     {
+         start = 0;
+         stop = 3;
+         differ = 1;
+     }
+     else if(show[0] == 6)
+     {
+         start = 2;
+         stop = -1;
+         differ = -1;
+     }
      for(int i = 0;i < 3;i++)//all three sides
      {
          if(i == 0)//top side
          {
             int x[] = {500, 600, 700};
             int y[] = {100,  50, 100};
-            for(int j = 0;j < 3;j++)//nine blocks
+            for(j = start;j != stop;j+=differ)//nine blocks
             {
-               for(int k = 0;k < 3;k++)
+               for(k = start;k != stop;k+=differ)
                {
                   g2d.setColor(colors[Sides[show[0]-1][j][k]-1]);// first row
                   g2d.fillPolygon(x, y, 3);
                   y[1] += 100;
                   g2d.fillPolygon(x, y, 3);
                   y[1] -= 100;
-                  for(int p = 0;p < 3; p++)
+                  for(p = start;p != stop; p+=differ)
                   {
                      x[p] += 100;
                      y[p] += 50;
                   }
                }
-               for(int l = 0;l < 3;l++)
+               for(l = start;l != stop;l+=differ)
                {
                   x[l] -= 400;
                   y[l] -= 100;
@@ -102,9 +115,9 @@ public class RubiksCubePanel extends JPanel
          {
             int x1[] = {300, 300, 400};
             int y1[] = {300, 200, 250};
-            for(int j = 0;j < 3;j++)//nine blocks
+            for(j = start;j != stop;j+=differ)//nine blocks
             {
-               for(int k = 0;k < 3;k++)
+               for(k = start;k != stop;k+=differ)
                {
                   g2d.setColor(colors[Sides[show[1]-1][j][k]-1]);// first row
                   g2d.fillPolygon(x1, y1, 3);
@@ -113,13 +126,13 @@ public class RubiksCubePanel extends JPanel
                   g2d.fillPolygon(x1, y1, 3);
                   x1[1] -= 100;
                   y1[1] -= 150;
-                  for(int p = 0;p < 3; p++)
+                  for(p = start;p != stop; p+=differ)
                   {
                      x1[p] += 100;
                      y1[p] += 50;
                   }
                }
-               for(int l = 0;l < 3;l++)
+               for(l = start;l != stop;l+=differ)
                {
                   x1[l] -= 300;
                   y1[l] -= 50;
@@ -130,9 +143,9 @@ public class RubiksCubePanel extends JPanel
          {
             int x2[] = {600, 600, 700};
             int y2[] = {450, 350, 300};
-            for(int j = 0;j < 3;j++)//nine blocks
+            for(j = start;j != stop;j+=differ)//nine blocks
             {
-               for(int k = 0;k < 3;k++)
+               for(k = start;k != stop;k+=differ)
                {
                   g2d.setColor(colors[Sides[show[2]-1][j][k]-1]);// first row
                   g2d.fillPolygon(x2, y2, 3);
@@ -141,13 +154,13 @@ public class RubiksCubePanel extends JPanel
                   g2d.fillPolygon(x2, y2, 3);
                   x2[1] -= 100;
                   y2[1] -= 50;
-                  for(int p = 0;p < 3; p++)
+                  for(p = start;p != stop; p+=differ)
                   {
                      x2[p] += 100;
                      y2[p] -= 50;
                   }
                }
-               for(int l = 0;l < 3;l++)
+               for(l = start;l != stop;l+=differ)
                {
                   x2[l] -= 300;
                   y2[l] += 250;
@@ -265,5 +278,244 @@ public class RubiksCubePanel extends JPanel
       }
    }
    
+   private void upperLeft()
+   {
+      int temp[] = {0, 0, 0};
+      if(show[0] == 1)
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[1][0][i];
+            Sides[1][0][i] = Sides[2][0][i];
+            Sides[2][0][i] = Sides[3][0][i];
+            Sides[3][0][i] = Sides[4][0][i];
+            Sides[4][0][i] = temp[i];
+         }
+         for(int j = 0; j < 2;j++)
+         {
+            temp[j]  = Sides[0][0][j];
+            Sides[0][0][j] = Sides[0][2 - j][0];
+            Sides[0][2 - j][0] = Sides[0][2][2 - j];
+            Sides[0][2][2 - j] = Sides[0][j][2];
+            Sides[0][j][2] = temp[j];   
+         }
+      }
+      else
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[4][2][i];
+            Sides[4][2][i] = Sides[3][2][i];
+            Sides[3][2][i] = Sides[2][2][i];
+            Sides[2][2][i] = Sides[1][2][i];
+            Sides[1][2][i] = temp[i];
+         }
+         for(int j = 0; j < 2;j++)
+         {
+            temp[j]  = Sides[5][0][j];
+            Sides[5][0][j] = Sides[5][2 - j][0];
+            Sides[5][2 - j][0] = Sides[5][2][2 - j];
+            Sides[5][2][2 - j] = Sides[5][j][2];
+            Sides[5][j][2] = temp[j];   
+         }
+      }
+   }
    
+   private void middleLeft()
+   {
+      int temp[] = {0, 0, 0};
+      if(show[0] == 1)
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[1][1][i];
+            Sides[1][1][i] = Sides[2][1][i];
+            Sides[2][1][i] = Sides[3][1][i];
+            Sides[3][1][i] = Sides[4][1][i];
+            Sides[4][1][i] = temp[i];
+         }
+      }
+      else
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[4][1][i];
+            Sides[4][1][i] = Sides[3][1][i];
+            Sides[3][1][i] = Sides[2][1][i];
+            Sides[2][1][i] = Sides[1][1][i];
+            Sides[1][1][i] = temp[i];
+         }
+      }
+   }
+   
+   private void lowerLeft()
+   {
+      int temp[] = {0, 0, 0};
+      if(show[0] == 1)
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[1][2][i];
+            Sides[1][2][i] = Sides[2][2][i];
+            Sides[2][2][i] = Sides[3][2][i];
+            Sides[3][2][i] = Sides[4][2][i];
+            Sides[4][2][i] = temp[i];
+         }
+         for(int j = 0; j < 2;j++)
+         {
+            temp[j]  = Sides[5][0][j];
+            Sides[5][0][j] = Sides[5][j][2];
+            Sides[5][j][2] = Sides[5][2][2 - j];
+            Sides[5][2][2 - j] = Sides[5][2 - j][0];
+            Sides[5][2 - j][0] = temp[j];   
+         }
+      }
+      else
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[4][0][i];
+            Sides[4][0][i] = Sides[3][0][i];
+            Sides[3][0][i] = Sides[2][0][i];
+            Sides[2][0][i] = Sides[1][0][i];
+            Sides[1][0][i] = temp[i];
+         }
+         for(int j = 0; j < 2;j++)
+         {
+            temp[j]  = Sides[0][0][j];
+            Sides[0][0][j] = Sides[0][j][2];
+            Sides[0][j][2] = Sides[0][2][2 - j];
+            Sides[0][2][2 - j] = Sides[0][2 - j][0];
+            Sides[0][2 - j][0] = temp[j];   
+         }
+      }
+   }
+   
+   private void rightUp()
+   {
+      int temp[] = {0, 0, 0};
+      int side = 0;
+      if(show[0] == 1)
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[0][i][2];
+            Sides[0][i][2] = Sides[show[1]-1][i][2];
+            Sides[show[1]-1][i][2] = Sides[5][2][2 - i];
+            Sides[5][2][2 - i] = Sides[opposite(show[1])-1][2 - i][0];
+            Sides[opposite(show[1])-1][2 - i][0] = temp[i];
+         }
+         for(int j = 0; j < 2;j++)
+         {
+            temp[j]  = Sides[rightAside(1, show[1]-1)][0][j];
+            Sides[rightAside(1, show[1]-1)][0][j] = Sides[rightAside(1, show[1]-1)][2 - j][0];
+            Sides[rightAside(1, show[1]-1)][2 - j][0] = Sides[rightAside(1, show[1]-1)][2][2 - j];
+            Sides[rightAside(1, show[1]-1)][2][2 - j] = Sides[rightAside(1, show[1]-1)][j][2];
+            Sides[rightAside(1, show[1]-1)][j][2] = temp[j];   
+         }
+      }
+      /*else
+      {
+         for(int i = 0;i < 3;i++)
+         {
+            temp[i] = Sides[5][i][0];
+            Sides[5][i][0] = Sides[show[1]-1][i][0];
+            Sides[show[1]-1][i][0] = Sides[0][0][i];
+            Sides[0][0][i] = Sides[opposite(show[1])-1][2 - i][0];
+            Sides[opposite(show[1])-1][2 - i][0] = temp[i];
+         }
+         for(int j = 0; j < 2;j++)
+         {
+            temp[j]  = Sides[rightAside(6, show[1]-1)][0][j];
+            Sides[rightAside(6, show[1]-1)][0][j] = Sides[rightAside(6, show[1]-1)][2 - j][0];
+            Sides[rightAside(6, show[1]-1)][2 - j][0] = Sides[rightAside(6, show[1]-1)][2][2 - j];
+            Sides[rightAside(6, show[1]-1)][2][2 - j] = Sides[rightAside(6, show[1]-1)][j][2];
+            Sides[rightAside(6, show[1]-1)][j][2] = temp[j];   
+         }
+      }*/
+   }
+   
+   private int rightAside(int top,int side)
+   {
+      int result = 0;
+      if(top == 1)
+      {
+         if(side == 5)
+         {
+            result = 2;
+         }
+         else
+         {
+            result = side + 1;
+         }
+      }
+      else
+      {
+         if(side == 2)
+         {
+            result = 5;
+         }
+         else
+         {
+            result = side - 1;
+         }
+      }
+      return result;
+   }
+   
+   private int leftAside(int top,int side)
+   {
+      int result = 0;
+      if(top == 1)
+      {
+         if(side == 2)
+         {
+            result = 5;
+         }
+         else
+         {
+            result = side - 1;
+         }
+      }
+      else
+      {
+         if(side == 5)
+         {
+            result = 2;
+         }
+         else
+         {
+            result = side + 1;
+         }
+      }
+      return result;
+   }
+
+   
+   private int opposite(int side)
+   {
+      int result = 0;
+      switch(side)
+      {
+         case 1:
+            result = 6;
+            break;
+         case 2:
+            result = 4;
+            break;
+         case 3:
+            result = 5;
+            break;
+         case 4:
+            result = 2;
+            break;
+         case 5:
+            result = 3;
+            break;
+         case 6:
+            result = 1;
+            break;
+      }
+      return result;
+   }
 }
