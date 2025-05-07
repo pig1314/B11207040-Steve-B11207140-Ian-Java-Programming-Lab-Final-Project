@@ -30,6 +30,9 @@ public class RubiksCubePanel extends JPanel
             public void keyPressed(KeyEvent e){
                  switch (e.getKeyCode()){
                      case KeyEvent.VK_RIGHT:
+                         turnRight();
+                         break;
+                     case KeyEvent.VK_LEFT:
                          turnLeft();
                          break;
                      case KeyEvent.VK_UP:
@@ -47,12 +50,12 @@ public class RubiksCubePanel extends JPanel
                      case KeyEvent.VK_Q:
                          rightUp();
                          break;
-                     /*case KeyEvent.VK_A:
+                     case KeyEvent.VK_A:
                          middleUp();
                          break;
                      case KeyEvent.VK_Z:
                          leftUp();
-                         break;*/
+                         break;
                  }
                  repaint();
             }
@@ -199,7 +202,7 @@ public void paint(Graphics g)
      g2d.drawLine(500, 300, 500, 600);
    }
    
-   private void turnLeft() //turn left for a side
+   private void turnRight() //turn right for a side
    {
       int temp[] = {0, 0, 0}; 
       for(int i = 1;i < 3;i++)
@@ -233,7 +236,7 @@ public void paint(Graphics g)
          Sides[show[0]-1][0][j] = Sides[show[0]-1][2 - j][0];
          Sides[show[0]-1][2 - j][0] = Sides[show[0]-1][2][2 - j];
          Sides[show[0]-1][2][2 - j] = Sides[show[0]-1][j][2];
-         Sides[show[0]-1][j][2] = temp[j];   
+         Sides[show[0]-1][j][2] = temp[j];
       }
       for(int j = 0; j < 2;j++)
       {
@@ -244,6 +247,53 @@ public void paint(Graphics g)
          Sides[opposite(show[0])-1][2 - j][0] = temp[j]; 
       } 
    }
+   
+   private void turnLeft() //turn right for a side
+   {
+      int temp[] = {0, 0, 0}; 
+      for(int i = 1;i < 3;i++)
+      {
+         if(show[0] == 1)
+         {
+            if(show[i] == 2)
+            {
+               show[i] = 5;
+            }
+            else
+            {
+               show[i] = show[i] - 1;
+            }
+         }
+         else if(show[0] == 6)
+         {
+            if(show[i] == 5)
+            {
+               show[i] = 2;
+            }
+            else
+            {
+               show[i] = show[i] + 1;
+            }
+         }
+      }
+      for(int j = 0; j < 2;j++)
+      {
+         temp[j]  = Sides[show[0]-1][0][j];
+         Sides[show[0]-1][0][j] = Sides[show[0]-1][j][2];
+         Sides[show[0]-1][j][2] = Sides[show[0]-1][2][2 - j];
+         Sides[show[0]-1][2][2 - j] = Sides[show[0]-1][2-j][0];
+         Sides[show[0]-1][2-j][0] = temp[j];
+      }
+      for(int j = 0; j < 2;j++)
+      {
+         temp[j]  = Sides[opposite(show[0])-1][0][j];
+         Sides[opposite(show[0])-1][0][j] = Sides[opposite(show[0])-1][2-j][0];
+         Sides[opposite(show[0])-1][2-j][0] = Sides[opposite(show[0])-1][2][2 - j];
+         Sides[opposite(show[0])-1][2][2 - j] = Sides[opposite(show[0])-1][j][2];
+         Sides[opposite(show[0])-1][j][2] = temp[j];
+      } 
+   }
+
    
    private void turnAround()  //upside down
    {
@@ -285,7 +335,7 @@ public void paint(Graphics g)
             show[2] = show[2] - 1;
          }
       }
-      if(show[0] == 1)// up and bottom
+      if(show[0] == 1)// top and bottom
       {
          show[0] = 6;
       }
@@ -295,7 +345,7 @@ public void paint(Graphics g)
       }
    }
    
-   private void upperLeft()
+   private void upperLeft() //the first row shown will turn left for a side
    {
       int temp[] = {0, 0, 0};
       if(show[0] == 1)
@@ -413,12 +463,9 @@ public void paint(Graphics g)
       int temp[] = {0, 0, 0};
       if(show[0] == 1)
       {
-         for(int q = 0; q < 3;q++)
-         {
-            temp[q] = Sides[0][q][2];
-         }
          for(int i = 0;i < 3;i++)
          {
+            temp[i] = Sides[0][i][2];
             Sides[0][i][2] = Sides[show[1]-1][i][2];
             Sides[show[1]-1][i][2] = Sides[5][2][2 - i];
             Sides[5][2][2 - i] = Sides[opposite(show[1]) - 1][2 - i][0];
@@ -436,12 +483,9 @@ public void paint(Graphics g)
       }
       else
       {
-         for(int q = 0; q < 3;q++)
-         {
-            temp[q] = Sides[5][2 - q][0];
-         }
          for(int i = 0;i < 3;i++)
          {
+            temp[i] = Sides[5][2 - i][0];
             Sides[5][2 - i][0] = Sides[show[1]-1][2 - i][0];
             Sides[show[1]-1][2 - i][0] = Sides[0][0][i];
             Sides[0][0][i] = Sides[opposite(show[1])-1][i][2];
@@ -458,69 +502,74 @@ public void paint(Graphics g)
       }
    }
    
-   /*private void middleUp() {
-    int temp[] = {0, 0, 0};
-    if (show[0] == 1) {
-        // Middle slice: front (2) -> top (1) -> back (4) -> bottom (6) -> front (2)
-        for (int i = 0; i < 3; i++) {
-            temp[i] = Sides[1][i][1]; // Top (1) middle column
-            Sides[1][i][1] = Sides[2-1][i][1]; // Front (2) -> Top (1)
-            Sides[2-1][i][1] = Sides[6-1][2-i][1]; // Bottom (6) -> Front (2)
-            Sides[6-1][2-i][1] = Sides[4-1][2-i][1]; // Back (4) -> Bottom (6)
-            Sides[4-1][2-i][1] = temp[i]; // Top (1) -> Back (4)
-        }
-    } else {
-        // Middle slice: bottom (6) -> back (4) -> top (1) -> front (2) -> bottom (6)
-        for (int i = 0; i < 3; i++) {
-            temp[i] = Sides[6-1][2-i][1]; // Bottom (6) middle column
-            Sides[6-1][2-i][1] = Sides[4-1][2-i][1]; // Back (4) -> Bottom (6)
-            Sides[4-1][2-i][1] = Sides[1][i][1]; // Top (1) -> Back (4)
-            Sides[1][i][1] = Sides[2-1][i][1]; // Front (2) -> Top (1)
-            Sides[2-1][i][1] = temp[i]; // Bottom (6) -> Front (2)
-        }
-    }
-}
+   private void middleUp() 
+   {
+       int temp[] = {0, 0, 0};
+       if (show[0] == 1)
+       {
+           for (int i = 0; i < 3; i++) {
+               temp[i] = Sides[0][i][1];
+               Sides[0][i][1] = Sides[show[1]-1][i][1];
+               Sides[show[1]-1][i][1] = Sides[5][1][2 - i];
+               Sides[5][1][2 - i] = Sides[opposite(show[1])-1][2-i][1];
+               Sides[opposite(show[1])-1][2-i][1] = temp[i];
+           }
+       } 
+       else 
+       {
+           for (int i = 0; i < 3; i++) 
+           {
+               temp[i] = Sides[5][2-i][1];
+               Sides[5][2-i][1] = Sides[show[1]-1][2-i][1];
+               Sides[show[1]-1][2-i][1] = Sides[0][1][2 - i];
+               Sides[0][1][2 - i] = Sides[opposite(show[1])-1][i][1]; 
+               Sides[opposite(show[1])-1][i][1] = temp[i];
+           }
+       }
+   }
 
-   private void leftUp() {
-    int temp[] = {0, 0, 0};
-    if (show[0] == 1) {
-        // Left column: top (1) -> left (2) -> bottom (6) -> back (4) -> top (1)
-        for (int i = 0; i < 3; i++) {
-            temp[i] = Sides[1-1][i][0]; // Top (1) left column
-            Sides[1-1][i][0] = Sides[show[1]-1][i][0]; // Left (2) -> Top (1)
-            Sides[show[1]-1][i][0] = Sides[6-1][2-i][0]; // Bottom (6) -> Left (2)
-            Sides[6-1][2-i][0] = Sides[4-1][2-i][2]; // Back (4), right column -> Bottom (6)
-            Sides[4-1][2-i][2] = temp[i]; // Top (1) -> Back (4), right column
-        }
-        // Rotate left face (show[1]) clockwise
-        int leftFace = show[1] - 1;
-        for (int j = 0; j < 2; j++) {
-            temp[j] = Sides[leftFace][0][j];
-            Sides[leftFace][0][j] = Sides[leftFace][2-j][0];
-            Sides[leftFace][2-j][0] = Sides[leftFace][2][2-j];
-            Sides[leftFace][2][2-j] = Sides[leftFace][j][2];
-            Sides[leftFace][j][2] = temp[j];
-        }
-    } else {
-        // Left column: bottom (6) -> back (4) -> top (1) -> left (2) -> bottom (6)
-        for (int i = 0; i < 3; i++) {
-            temp[i] = Sides[6-1][2-i][0]; // Bottom (6) left column
-            Sides[6-1][2-i][0] = Sides[4-1][2-i][2]; // Back (4), right column -> Bottom (6)
-            Sides[4-1][2-i][2] = Sides[1-1][i][0]; // Top (1) -> Back (4), right column
-            Sides[1-1][i][0] = Sides[show[1]-1][i][0]; // Left (2) -> Top (1)
-            Sides[show[1]-1][i][0] = temp[i]; // Bottom (6) -> Left (2)
-        }
-        // Rotate left face (show[1]) clockwise
-        int leftFace = show[1] - 1;
-        for (int j = 0; j < 2; j++) {
-            temp[j] = Sides[leftFace][0][j];
-            Sides[leftFace][0][j] = Sides[leftFace][2-j][0];
-            Sides[leftFace][2-j][0] = Sides[leftFace][2][2-j];
-            Sides[leftFace][2][2-j] = Sides[leftFace][j][2];
-            Sides[leftFace][j][2] = temp[j];
-        }
-    }
-}*/
+   private void leftUp() 
+   {
+       int temp[] = {0, 0, 0};
+       if (show[0] == 1) 
+       {
+           for (int i = 0; i < 3; i++)
+           {
+               temp[i] = Sides[0][i][0];
+               Sides[0][i][0] = Sides[show[1]-1][i][0];
+               Sides[show[1]-1][i][0] = Sides[5][0][2-i];
+               Sides[5][0][2-i] = Sides[opposite(show[1])-1][2-i][2];
+               Sides[opposite(show[1])-1][2-i][2] = temp[i];
+           }
+           for (int j = 0; j < 2; j++)
+           {
+               temp[j] = Sides[leftAside(show[0], show[1])][0][j];
+               Sides[leftAside(show[0], show[1])][0][j] = Sides[leftAside(show[0], show[1])][j][2];
+               Sides[leftAside(show[0], show[1])][j][2] = Sides[leftAside(show[0], show[1])][2][2-j];
+               Sides[leftAside(show[0], show[1])][2][2-j] = Sides[leftAside(show[0], show[1])][2-j][0];
+               Sides[leftAside(show[0], show[1])][2-j][0] = temp[j];
+           }
+       } 
+       else 
+       {
+           for (int i = 0; i < 3; i++) 
+           {
+               temp[i] = Sides[5][2-i][2];
+               Sides[5][2-i][2] = Sides[show[1]-1][2-i][2];
+               Sides[show[1]-1][2-i][2] = Sides[1-1][2][i];
+               Sides[1-1][2][i] = Sides[opposite(show[1])-1][i][0];
+               Sides[opposite(show[1])-1][i][0] = temp[i];
+           }
+           for (int j = 0; j < 2; j++) 
+           {
+               temp[j] = Sides[leftAside(show[0], show[1])][0][j];
+               Sides[leftAside(show[0], show[1])][0][j] = Sides[leftAside(show[0], show[1])][0][2-j];
+               Sides[leftAside(show[0], show[1])][0][2-j] = Sides[leftAside(show[0], show[1])][2][2-j];
+               Sides[leftAside(show[0], show[1])][2][2-j] = Sides[leftAside(show[0], show[1])][2-j][0];
+               Sides[leftAside(show[0], show[1])][2-j][0] = temp[j];
+           }
+       }
+   }
    
    private int rightAside(int top,int side)
    {
