@@ -26,6 +26,8 @@ public class RubiksCubePanel extends JPanel
    {
       //System.out.println(Sides[5][1][1]);
       //repaint();
+      setUp();
+      repaint();
       addKeyListener(new KeyAdapter(){
             public void keyPressed(KeyEvent e){
                  switch (e.getKeyCode()){
@@ -60,7 +62,7 @@ public class RubiksCubePanel extends JPanel
                  repaint();
             }
         });
-         setFocusable(true);
+        setFocusable(true);
    }
    
 public void paint(Graphics g) 
@@ -470,7 +472,7 @@ public void paint(Graphics g)
             Sides[show[1]-1][i][2] = Sides[5][2][2 - i];
             Sides[5][2][2 - i] = Sides[opposite(show[1]) - 1][2 - i][0];
             Sides[opposite(show[1]) - 1][2 - i][0] = temp[i];
-            System.out.println("1."+Sides[5][2][0] +" 2."+Sides[5][2][1] +" 3."+Sides[5][2][2]);
+            //System.out.println("1."+Sides[5][2][0] +" 2."+Sides[5][2][1] +" 3."+Sides[5][2][2]);
          }
          for(int j = 0; j < 2;j++)
          {
@@ -521,8 +523,8 @@ public void paint(Graphics g)
            {
                temp[i] = Sides[5][2-i][1];
                Sides[5][2-i][1] = Sides[show[1]-1][2-i][1];
-               Sides[show[1]-1][2-i][1] = Sides[0][1][2 - i];
-               Sides[0][1][2 - i] = Sides[opposite(show[1])-1][i][1]; 
+               Sides[show[1]-1][2-i][1] = Sides[0][1][2-i];
+               Sides[0][1][2-i] = Sides[opposite(show[1])-1][i][1]; 
                Sides[opposite(show[1])-1][i][1] = temp[i];
            }
        }
@@ -556,15 +558,15 @@ public void paint(Graphics g)
            {
                temp[i] = Sides[5][2-i][2];
                Sides[5][2-i][2] = Sides[show[1]-1][2-i][2];
-               Sides[show[1]-1][2-i][2] = Sides[1-1][2][i];
-               Sides[1-1][2][i] = Sides[opposite(show[1])-1][i][0];
+               Sides[show[1]-1][2-i][2] = Sides[0][2][i];
+               Sides[0][2][i] = Sides[opposite(show[1])-1][i][0];
                Sides[opposite(show[1])-1][i][0] = temp[i];
            }
            for (int j = 0; j < 2; j++) 
            {
                temp[j] = Sides[leftAside(show[0], show[1])][0][j];
-               Sides[leftAside(show[0], show[1])][0][j] = Sides[leftAside(show[0], show[1])][0][2-j];
-               Sides[leftAside(show[0], show[1])][0][2-j] = Sides[leftAside(show[0], show[1])][2][2-j];
+               Sides[leftAside(show[0], show[1])][0][j] = Sides[leftAside(show[0], show[1])][j][2];
+               Sides[leftAside(show[0], show[1])][j][2] = Sides[leftAside(show[0], show[1])][2][2-j];
                Sides[leftAside(show[0], show[1])][2][2-j] = Sides[leftAside(show[0], show[1])][2-j][0];
                Sides[leftAside(show[0], show[1])][2-j][0] = temp[j];
            }
@@ -654,4 +656,63 @@ public void paint(Graphics g)
       }
       return result;
    }
+   
+   private void setUp()
+   {
+      int order[] = new int[10];
+      for(int i = 0;i < order.length;i++)
+      {
+            order[i] = (int)(Math.random() * 9);
+            System.out.print(order[i]+" ");
+      }
+      for(int j = 0; j < order.length;j++)
+      {
+         switch(order[j])
+         {
+            case 0:
+               turnRight();
+               break;
+            case 1:
+               turnLeft();
+               break;
+            case 2:
+               turnAround();
+               break;
+            case 3:
+               upperLeft();
+               break;
+            case 4:
+               middleLeft();
+               break;
+            case 5:
+               lowerLeft();
+               break;
+            case 6:
+               rightUp();
+               break;
+            case 7:
+               middleUp();
+               break;
+            case 8:
+               leftUp();
+               break;
+            default:
+               break;
+         }
+      }
+   }
 }
+
+/*
+Functions
+
+turnRight();
+turnLeft();
+turnAround();
+upperLeft();
+middleLeft();
+lowerLeft();
+rightUp();
+middleUp();
+leftUp();
+*/
