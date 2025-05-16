@@ -1,16 +1,16 @@
-   //Torbert, e-mail: smtorbert@fcps.edu
-	//version 6.17.2003
+import javax.swing.JFrame;
 
-   import javax.swing.JFrame;
-    public class DriverFinal
-   {
-       public static void main(String[] args)
-      { 
-         JFrame frame = new JFrame("Rubiks Cube");
-         frame.setSize(1600, 900);
-         frame.setLocation(0, 0);
-         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       	frame.setContentPane(new RubiksCubePanel());
-         frame.setVisible(true);
-      }
+
+public class DriverFinal
+{
+   public static void main(String[] args)
+   { 
+      JFrame frame = new JFrame("Rubiks Cube");
+      frame.setLocation(0, 0);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.add(new MainMenuPanel(frame));
+      frame.pack();
+      frame.setLocationRelativeTo(null);
+      frame.setVisible(true);
    }
+}

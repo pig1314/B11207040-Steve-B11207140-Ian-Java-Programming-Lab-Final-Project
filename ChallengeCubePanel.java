@@ -5,7 +5,7 @@ import java.awt.image.*;
 import java.util.Random;
 import edu.fcps.karel2.Display;
 
-public class RubiksCubePanel extends JPanel
+public class ChallengeCubePanel extends JPanel
 {
    //define six sides
    private static final int PANEL_WIDTH = 1600;
@@ -14,6 +14,8 @@ public class RubiksCubePanel extends JPanel
    private BufferedImage myImage;
    private Graphics2D myBuffer;
    
+   private double time = 0.0;
+   private boolean observationDone = false;
    private int show[] = {1, 2, 3};
    private int Sides[][][] = {{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}},
                               {{2, 2, 2}, {2, 2, 2}, {2, 2, 2}},
@@ -22,58 +24,122 @@ public class RubiksCubePanel extends JPanel
                               {{5, 5, 5}, {5, 5, 5}, {5, 5, 5}},
                               {{6, 6, 6}, {6, 6, 6}, {6, 6, 6}}};
    private final Color colors[] = {Color.WHITE, Color.ORANGE, Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW};
+   private Timer timer;
    
-   public RubiksCubePanel()
+   public ChallengeCubePanel()
    {
+      timer = new Timer(100, e -> 
+      {
+         time += 0.1;
+         repaint();
+      });
       setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
       setBackground(BACKGROUND);
       setLayout(null);
+      setUp();
       repaint();
       addKeyListener(new KeyAdapter(){
             public void keyPressed(KeyEvent e){
-                 switch (e.getKeyCode()){
-                     case KeyEvent.VK_RIGHT:
-                         turnRight();
-                         break;
-                     case KeyEvent.VK_LEFT:
-                         turnLeft();
-                         break;
-                     case KeyEvent.VK_UP:
-                         turnAround();
-                         break;
-                     case KeyEvent.VK_E:
-                         upperLeft();
-                         break;
-                     case KeyEvent.VK_D:
-                         middleLeft();
-                         break;
-                     case KeyEvent.VK_C:
-                         lowerLeft();
-                         break;
-                     case KeyEvent.VK_Q:
-                         rightUp();
-                         break;
-                     case KeyEvent.VK_A:
-                         middleUp();
-                         break;
-                     case KeyEvent.VK_Z:
-                         leftUp();
-                         break;
-                 }
-                 repaint();
+               if(observationDone == false)
+               {
+                  switch (e.getKeyCode())
+                  {
+                        case KeyEvent.VK_RIGHT:
+                            turnRight();
+                            break;
+                        case KeyEvent.VK_LEFT:
+                            turnLeft();
+                            break;
+                        case KeyEvent.VK_UP:
+                            turnAround();
+                            break;
+                        case KeyEvent.VK_SPACE:
+                            observationDone = true;
+                            break;
+                        default:
+                           break;
+                  }
+               }
+               else if(observationDone == true)
+               {
+                    timer.start();
+                    switch (e.getKeyCode())
+                    {
+                        case KeyEvent.VK_RIGHT:
+                            turnRight();
+                            break;
+                        case KeyEvent.VK_LEFT:
+                            turnLeft();
+                            break;
+                        case KeyEvent.VK_UP:
+                            turnAround();
+                            break;
+                        case KeyEvent.VK_E:
+                            upperLeft();
+                            break;
+                        case KeyEvent.VK_D:
+                            middleLeft();
+                            break;
+                        case KeyEvent.VK_C:
+                            lowerLeft();
+                            break;
+                        case KeyEvent.VK_Q:
+                            rightUp();
+                            break;
+                        case KeyEvent.VK_A:
+                            middleUp();
+                            break;
+                        case KeyEvent.VK_Z:
+                            leftUp();
+                            break;
+                        default:
+                            break;
+                    }
+               }
+               repaint();
             }
         });
         setFocusable(true);
    }
    
-protected void paintComponent(Graphics g) 
+public void paint(Graphics g) 
 {
-     super.paintComponent(g);
+     super.paint(g);
      Graphics2D g2d = (Graphics2D) g;
 
      //game region
      g2d.setColor(BACKGROUND);
      g2d.fillRect(0, 0, 1600, 900);
+     
+     //time counter
+     g.setColor(Color.LIGHT_GRAY);
+     g.fillRect(50, 40, 150, 50);
+     g.setColor(Color.WHITE);
+     g.setFont(new Font("Arial", Font.BOLD, 20));
+     g.drawString("time:" + (Math.round(time * 10.0) / 10.0), 60, 70);
+     
+     if(observationDone == false)
+     {
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(50, 100, 150, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Observating", 60, 130);
+        
+        g.setColor(Color.RED);
+        g.fillRect(50, 160, 230, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Press SPACE to start", 60, 190);
+     }
+     else
+     {
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(50, 100, 150, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Sloving", 60, 130);
+     }
      
      //fill color
      int start = 0, stop = 0, differ = 0, j, k, p, l;
