@@ -23,7 +23,7 @@ public class RubiksCubePanel extends JPanel
                               {{6, 6, 6}, {6, 6, 6}, {6, 6, 6}}};
    private final Color colors[] = {Color.WHITE, Color.ORANGE, Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW};
    
-   public RubiksCubePanel()
+   public RubiksCubePanel(JFrame frame)
    {
       setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
       setBackground(BACKGROUND);
@@ -59,6 +59,15 @@ public class RubiksCubePanel extends JPanel
                      case KeyEvent.VK_Z:
                          leftUp();
                          break;
+                     case KeyEvent.VK_ESCAPE:
+                         frame.getContentPane().removeAll();
+                         MainMenuPanel MainPanel = new MainMenuPanel(frame);
+                         frame.add(MainPanel);
+                         frame.pack();
+                         MainPanel.requestFocusInWindow();
+                         frame.revalidate();
+                         frame.repaint();
+                         break;
                  }
                  repaint();
             }
@@ -74,6 +83,13 @@ protected void paintComponent(Graphics g)
      //game region
      g2d.setColor(BACKGROUND);
      g2d.fillRect(0, 0, 1600, 900);
+     
+     //instruction
+     g.setColor(Color.LIGHT_GRAY);
+     g.fillRect(50, 50, 200, 50);
+     g.setColor(Color.WHITE);
+     g.setFont(new Font("Arial", Font.BOLD, 20));
+     g.drawString("Press ESC to Menu", 60, 80);
      
      //fill color
      int start = 0, stop = 0, differ = 0, j, k, p, l;

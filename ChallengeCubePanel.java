@@ -16,6 +16,7 @@ public class ChallengeCubePanel extends JPanel
    
    private double time = 0.0;
    private boolean observationDone = false;
+   private boolean End = false;
    private int show[] = {1, 2, 3};
    private int Sides[][][] = {{{1, 1, 1}, {1, 1, 1}, {1, 1, 1}},
                               {{2, 2, 2}, {2, 2, 2}, {2, 2, 2}},
@@ -26,11 +27,16 @@ public class ChallengeCubePanel extends JPanel
    private final Color colors[] = {Color.WHITE, Color.ORANGE, Color.GREEN, Color.RED, Color.BLUE, Color.YELLOW};
    private Timer timer;
    
-   public ChallengeCubePanel()
+   public ChallengeCubePanel(JFrame frame)
    {
       timer = new Timer(100, e -> 
       {
          time += 0.1;
+         if(check() == true)
+         {
+            timer.stop();
+            End = true;
+         }
          repaint();
       });
       setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -39,67 +45,83 @@ public class ChallengeCubePanel extends JPanel
       setUp();
       repaint();
       addKeyListener(new KeyAdapter(){
-            public void keyPressed(KeyEvent e){
-               if(observationDone == false)
-               {
-                  switch (e.getKeyCode())
-                  {
-                        case KeyEvent.VK_RIGHT:
-                            turnRight();
-                            break;
-                        case KeyEvent.VK_LEFT:
-                            turnLeft();
-                            break;
-                        case KeyEvent.VK_UP:
-                            turnAround();
-                            break;
-                        case KeyEvent.VK_SPACE:
-                            observationDone = true;
-                            break;
-                        default:
-                           break;
-                  }
-               }
-               else if(observationDone == true)
-               {
-                    timer.start();
-                    switch (e.getKeyCode())
-                    {
-                        case KeyEvent.VK_RIGHT:
-                            turnRight();
-                            break;
-                        case KeyEvent.VK_LEFT:
-                            turnLeft();
-                            break;
-                        case KeyEvent.VK_UP:
-                            turnAround();
-                            break;
-                        case KeyEvent.VK_E:
-                            upperLeft();
-                            break;
-                        case KeyEvent.VK_D:
-                            middleLeft();
-                            break;
-                        case KeyEvent.VK_C:
-                            lowerLeft();
-                            break;
-                        case KeyEvent.VK_Q:
-                            rightUp();
-                            break;
-                        case KeyEvent.VK_A:
-                            middleUp();
-                            break;
-                        case KeyEvent.VK_Z:
-                            leftUp();
-                            break;
-                        default:
-                            break;
-                    }
-               }
-               repaint();
+         public void keyPressed(KeyEvent e){
+            switch (e.getKeyCode())
+            {
+               case KeyEvent.VK_ESCAPE:
+                   frame.getContentPane().removeAll();
+                   MainMenuPanel MainPanel = new MainMenuPanel(frame);
+                   frame.add(MainPanel);
+                   frame.pack();
+                   MainPanel.requestFocusInWindow();
+                   frame.revalidate();
+                   frame.repaint();
+                   break;
+               default:
+                   break;
             }
-        });
-        setFocusable(true);
+            if(observationDone == false && End == false)
+            {
+               System.out.println(".");
+               switch (e.getKeyCode())
+               {
+                     case KeyEvent.VK_RIGHT:
+                         turnRight();
+                         break;
+                     case KeyEvent.VK_LEFT:
+                         turnLeft();
+                         break;
+                     case KeyEvent.VK_UP:
+                         turnAround();
+                         break;
+                     case KeyEvent.VK_SPACE:
+                         observationDone = true;
+                         timer.start();
+                         break;
+                     default:
+                         break;
+               }
+            }
+            else if(observationDone == true && End == false)
+            {
+                 System.out.println(".");
+                 switch (e.getKeyCode())
+                 {
+                     case KeyEvent.VK_RIGHT:
+                         turnRight();
+                         break;
+                     case KeyEvent.VK_LEFT:
+                         turnLeft();
+                         break;
+                     case KeyEvent.VK_UP:
+                         turnAround();
+                         break;
+                     case KeyEvent.VK_E:
+                         upperLeft();
+                         break;
+                     case KeyEvent.VK_D:
+                         middleLeft();
+                         break;
+                     case KeyEvent.VK_C:
+                         lowerLeft();
+                         break;
+                     case KeyEvent.VK_Q:
+                         rightUp();
+                         break;
+                     case KeyEvent.VK_A:
+                         middleUp();
+                         break;
+                     case KeyEvent.VK_Z:
+                         leftUp();
+                         break;
+                     default:
+                         break;
+                 }
+            }
+            repaint();
+         }
+      });
+      setFocusable(true);
    }
    
 public void paint(Graphics g) 
@@ -116,9 +138,10 @@ public void paint(Graphics g)
      g.fillRect(50, 40, 150, 50);
      g.setColor(Color.WHITE);
      g.setFont(new Font("Arial", Font.BOLD, 20));
-     g.drawString("time:" + (Math.round(time * 10.0) / 10.0), 60, 70);
+     g.drawString("time:" + (Math.round(time * 10.0) / 10.0) + "s", 60, 70);
      
-     if(observationDone == false)
+     //instructions
+     if(observationDone == false && End == false)
      {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(50, 100, 150, 50);
@@ -131,16 +154,44 @@ public void paint(Graphics g)
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 20));
         g.drawString("Press SPACE to start", 60, 190);
+        
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(50, 220, 200, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Press ESC to Menu", 60, 250);
      }
-     else
+     else if(observationDone == true && End == false)
      {
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(50, 100, 150, 50);
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 20));
         g.drawString("Sloving", 60, 130);
+        
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(50, 160, 200, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Press ESC to Menu", 60, 190);
+     }
+     else if(End == true)
+     {
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(50, 100, 150, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Congrats!", 60, 130);
+        
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(50, 160, 200, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Press ESC to Menu", 60, 190);
      }
      
+     
+  
      //fill color
      int start = 0, stop = 0, differ = 0, j, k, p, l;
      if(show[0] == 1)
@@ -726,11 +777,12 @@ public void paint(Graphics g)
    
    private void setUp()
    {
-      int order[] = new int[10];
+      int order[] = new int[20]; //randomly 20 turns
       for(int i = 0;i < order.length;i++)
       {
-            order[i] = (int)(Math.random() * 9);
-            System.out.print(order[i]+" ");
+            //order[i] = 4; //test
+            order[i] = (int)(Math.random() * 9); //official
+            //System.out.print(order[i]+" ");
       }
       for(int j = 0; j < order.length;j++)
       {
@@ -766,6 +818,36 @@ public void paint(Graphics g)
             default:
                break;
          }
+      }
+   }
+   
+   private boolean check()
+   {
+      int count = 0;
+      for(int i = 0;i < 6; i++)
+      {
+         for(int j = 0; j < 2;j++)
+         {
+            for(int k = 0;k < 2;k++)
+            {
+               if(Sides[i][j][k] == Sides[i][j][k+1] && Sides[i][j][k] == Sides[i][j+1][k] && Sides[i][j][k] == Sides[i][j+1][k+1])
+               {
+                  count += 1;
+                  System.out.println(i);
+                  System.out.println(j);
+                  System.out.println(k);
+                  System.out.println(count);
+               }
+            }
+         }
+      }
+      if(count == 24)
+      {
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 }

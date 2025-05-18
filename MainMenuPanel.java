@@ -19,7 +19,7 @@ public class MainMenuPanel extends JPanel {
         add(titleLabel);
 
         // Start 按鈕
-        JButton CasualButton = new JButton("Casual");
+        JButton CasualButton = new JButton("Practice");
         CasualButton.setForeground(Color.WHITE);
         CasualButton.setBackground(Color.GREEN);
         CasualButton.setFont(new Font("Arial", Font.BOLD, 30));
@@ -27,7 +27,7 @@ public class MainMenuPanel extends JPanel {
         CasualButton.setFocusPainted(false);
         CasualButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            RubiksCubePanel CasualPanel = new RubiksCubePanel();
+            RubiksCubePanel CasualPanel = new RubiksCubePanel(frame);
             frame.add(CasualPanel);
             frame.pack();
             CasualPanel.requestFocusInWindow();
@@ -44,7 +44,7 @@ public class MainMenuPanel extends JPanel {
         ChallengeButton.setFocusPainted(false);
         ChallengeButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            ChallengeCubePanel ChallengePanel = new ChallengeCubePanel();
+            ChallengeCubePanel ChallengePanel = new ChallengeCubePanel(frame);
             frame.add(ChallengePanel);
             frame.pack();
             ChallengePanel.requestFocusInWindow();

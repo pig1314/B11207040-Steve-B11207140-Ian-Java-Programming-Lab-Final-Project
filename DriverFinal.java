@@ -5,12 +5,16 @@ public class DriverFinal
 {
    public static void main(String[] args)
    { 
-      JFrame frame = new JFrame("Rubiks Cube");
+      JFrame frame = new JFrame("Rubik's Cube");
       frame.setLocation(0, 0);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.add(new MainMenuPanel(frame));
+      frame.getContentPane().removeAll();
+      MainMenuPanel MainPanel = new MainMenuPanel(frame);
+      frame.add(MainPanel);
       frame.pack();
-      frame.setLocationRelativeTo(null);
+      MainPanel.requestFocusInWindow();
+      frame.revalidate();
+      frame.repaint();
       frame.setVisible(true);
    }
 }
