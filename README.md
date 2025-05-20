@@ -71,16 +71,20 @@
 •  **作業系統**：Windows (Windows 8 or Higher) / macOS ARM 64 or X64 (Mavericks 10.9 or Higher) / Linux / UNIX
 
 •  **JAVA**：JDK11 以上
-1. 下載 RubiksCube.jar
+1. 下載 Rubiks cube.jar
 2. 開啟終端機執行：
    
    ```bash
-   java -jar RubiksCube.jar
+   java -jar Rubiks cube.jar
    ```
-   
+ 
+---
+
 ## 功能列表
 ### 1. 畫面顯示
-• 遊戲畫面顯示
+• 遊戲畫面顯示、更新
+
+• 紀錄時間動態顯示
 
 ---
 
@@ -88,6 +92,7 @@
 • 讀取鍵盤輸入
 
 • 讀取滑鼠輸入
+
 ---
 
 ### 3. 模式選擇
@@ -109,23 +114,20 @@
 
 ---
 
-## 參考資料
-• ChatGPT協助修改
+## AI使用
+• ChatGPT協助釐清問題
 
 ---
 
 ## UML 類別圖 (Class Diagram)
-
-![]()
+![class diagram](https://github.com/pig1314/B11207040-Steve-B11207140-Ian-Java-Programming-Lab-Final-Project/blob/main/images/class%20diagram.png)
 
 ---
 
 ## 流程圖 (Flow Chart)
-### • 
-![]()
+![Flow chart](https://github.com/pig1314/B11207040-Steve-B11207140-Ian-Java-Programming-Lab-Final-Project/blob/main/images/Flow%20chart.png)
 
 ---
 
 ## 序列圖 (Sequence Diagram)
-### • 
-![]()
+![Sequential diagram](https://github.com/pig1314/B11207040-Steve-B11207140-Ian-Java-Programming-Lab-Final-Project/blob/main/images/Sequential%20diagram.png)
